@@ -1,0 +1,43 @@
+<html>
+  <head>
+    <title>Video Creator</title>
+  </head>
+  <body>
+    <h1>Video Creator</h1>
+    <p>Enter your prompt below:</p>
+    <form>
+      <input type="text" id="prompt" />
+      <button type="submit">Create Video</button>
+    </form>
+    <br />
+    <div id="results"></div>
+    <script>
+      const form = document.querySelector("form");
+      const promptInput = document.querySelector("#prompt");
+      const resultsDiv = document.querySelector("#results");
+
+      form.addEventListener("submit", event => {
+        event.preventDefault(); // prevent the form from submitting
+        const prompt = promptInput.value;
+        resultsDiv.innerHTML = ""; // clear previous results
+
+        // make a request to your video creation API using fetch
+        fetch(`https://your-api.com/create-video?prompt=${prompt}`)
+          .then(response => response.json())
+          .then(data => {
+            const videoUrl = data.videoUrl;
+            // create an iframe to display the video and a download link
+            const videoFrame = document.createElement("iframe");
+            videoFrame.src = videoUrl;
+            const downloadLink = document.createElement("a");
+            downloadLink.href = videoUrl;
+            downloadLink.download = "my-video.mp4";
+            downloadLink.innerText = "Download Video";
+            // append the iframe and download link to the results div
+            resultsDiv.appendChild(videoFrame);
+            resultsDiv.appendChild(downloadLink);
+          });
+      });
+    </script>
+  </body>
+</html>
